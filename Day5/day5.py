@@ -145,18 +145,11 @@ index = "seed"
 index_map["start"] = "seed"
 start_map = maps["start-to-seed"]
 result_map = maps["start-to-seed"]
-# part 2 - calculate all ranges and overlaps
+# part 2 - calculate all ranges and overlaps -> not yet working
 while index in index_map:
     lookup_map_index = index+"-to-"+index_map[index]
-    # print(lookup_map_index)
     index = index_map[index]
     result_map = intersect_maps(result_map, maps[lookup_map_index])
-    # print("------------")
-    # print(result_map)
-    # break
-    # print(result_map)
-    # if index == "light":
-    #    break
 
 min = -1
 min_seed = 0
@@ -165,6 +158,3 @@ for x, y, z in result_map:
         min = x
         min_seed = y
 print(min, min_seed)
-# print(maps)
-# print(index_map)
-# print(start_ranges)
