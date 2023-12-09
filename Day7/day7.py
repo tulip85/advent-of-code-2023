@@ -8,6 +8,7 @@ sorting_key_2 = {'A': 12, 'K': 11, 'Q': 10, 'T': 9, '9': 8,
 
 
 def return_type_rank(cards, remove_joker=False):
+    ''' Returns the rank of a given hand of cards '''
     cards_string = ''.join(cards)
 
     if remove_joker:
@@ -42,7 +43,6 @@ def return_type_rank(cards, remove_joker=False):
     # High card: all cards have different values -> 1
     elif unique_cards == 5:
         return 1
-
     else:
         print("error ", cards)
 

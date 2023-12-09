@@ -8,6 +8,11 @@ node_mapping_left = {}
 node_mapping_right = {}
 start_nodes = []
 
+# process input into three lists:
+#   - node_mapping_left: all decisions when going left
+#   - node_mapping_right: all next steps when going right
+#   - start_nodes: all initial nodes (ending with an A)
+
 for node_mapping_line in input_file:
     source = node_mapping_line.split("=")[0].strip()
     node_mapping_left[source] = node_mapping_line.split("=")[1].strip().split(
@@ -17,7 +22,7 @@ for node_mapping_line in input_file:
     if source[2] == 'A':
         start_nodes.append(source)
 
-''' Part 1 '''
+# Part 1: just go through the steps
 
 CURR_NODE = 'AAA'
 STEPS = 0
@@ -31,7 +36,9 @@ while CURR_NODE != 'ZZZ':
 
 print("Result1", STEPS)
 
-''' Part 2 (only works in this way because the input set has been specially crafted)'''
+# Part 2 (only works in this way because the input set has been specially crafted)
+# Detect the length of the cycle from first start node to first end node
+# Do a least common multiplier on all cycles
 
 cycles_to_z = []
 

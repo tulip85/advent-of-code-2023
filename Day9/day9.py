@@ -7,6 +7,7 @@ RESULT_2 = 0
 
 
 def predict_item(sequence, last=True):
+    ''' Predicts an item at the beginning (last=False) or end of a list'''
     # if all the same numbers in the list, return that number
     if len(set(sequence)) == 1:
         return sequence[0]
