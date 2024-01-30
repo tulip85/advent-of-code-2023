@@ -19,6 +19,7 @@ for line in open("Day21/input1.in", encoding="utf-8"):
 
 # replicate x times:
 offset = 131
+print("replicating")
 for replicas in range(0, 1):
     for item in GARDEN_PLOT_REGISTRY:
         GARDEN_PLOT_REGISTRY.append((item[0]+offset, item[1]))
@@ -28,7 +29,7 @@ for replicas in range(0, 1):
     offset += 131
 
 start = (start[0] + offset, start[1]+offset)
-
+print("done replicating")
 print(start)
 queue = [start]
 
@@ -67,6 +68,7 @@ while STEP < MAX_STEPS_1:
 
     last_four_len.append((len(queue)))
     last_four_len = last_four_len[1:]
+    print(STEP)
 
     if STEP == 65:
         print("65", len(queue))

@@ -1,7 +1,50 @@
 
 from copy import deepcopy
+import random
 WIRED_CONNECTIONS = {}
 WIRES = []
+
+cuts = []
+CONTRACTED_NODES = {}
+GRAPH = {}
+
+
+def karger_min_cut():
+    global GRAPH
+    global CONTRACTED_NODES
+
+    CONTRACTED_NODES = {}
+
+    GRAPH = deepcopy(WIRED_CONNECTIONS)
+    while len(GRAPH) > 2:
+        first_node = random.choice(list(GRAPH.keys()))
+        second_node = random.choice(GRAPH[first_node])
+        contract(first_node, second_node)
+
+        if first_node not in CONTRACTED_NODES:
+            CONTRACTED_NODES[first_node] = set()
+        if second_node not in CONTRACTED_NODES:
+            CONTRACTED_NODES[second_node] = set()
+
+        CONTRACTED_NODES[first_node].add(second_node)
+        # print(CONTRACTED_NODES)
+
+    mincut = len(GRAPH[list(GRAPH.keys())[0]])
+    cuts.append(mincut)
+
+    return mincut
+
+
+def contract(first_node, second_node):
+    for node in GRAPH[second_node]:
+        if node != first_node:
+            GRAPH[first_node].append(node)
+        GRAPH[node].remove(second_node)
+        if node != first_node:
+            GRAPH[node].append(first_node)
+
+    del GRAPH[second_node]
+
 
 for line in open("Day25/input1.in", encoding="utf-8"):
     parts = line.strip().split(":")
@@ -20,19 +63,30 @@ for line in open("Day25/input1.in", encoding="utf-8"):
         WIRES.append((end, start))
 
 
-print(WIRED_CONNECTIONS)
-for wire1 in WIRES:
-    for wire2 in WIRES:
-        for wire3 in WIRES:
-            SIMULATION = deepcopy(WIRED_CONNECTIONS)
-            if wire1[0] in SIMULATION[wire1[1]]:
-                SIMULATION[wire1[0]].remove(wire1[1])
-                SIMULATION[wire1[1]].remove(wire1[0])
-            if wire2[0] in SIMULATION[wire2[1]]:
-                SIMULATION[wire2[0]].remove(wire2[1])
-                SIMULATION[wire2[1]].remove(wire2[0])
-            if wire3[0] in SIMULATION[wire3[1]]:
-                SIMULATION[wire3[0]].remove(wire3[1])
-                SIMULATION[wire3[1]].remove(wire3[0])
-            for line in SIMULATION:
-                print(SIMULATION)
+min_cut = 0
+while min_cut != 3:
+    min_cut = karger_min_cut()
+
+
+groups = {list(GRAPH.keys())[0]: set(), list(GRAPH.keys())[1]: set()}
+
+stack_1 = [list(GRAPH.keys())[0]]
+stack_2 = [list(GRAPH.keys())[1]]
+
+group_size_1 = 0
+while len(stack_1) > 0:
+    node = stack_1.pop()
+    group_size_1 += 1
+    if len(CONTRACTED_NODES[node]) > 0:
+        for item in CONTRACTED_NODES[node]:
+            stack_1.append(item)
+
+group_size_2 = 0
+while len(stack_2) > 0:
+    node = stack_2.pop()
+    group_size_2 += 1
+    if len(CONTRACTED_NODES[node]) > 0:
+        for item in CONTRACTED_NODES[node]:
+            stack_2.append(item)
+
+print(group_size_1, group_size_2, group_size_2*group_size_1)
